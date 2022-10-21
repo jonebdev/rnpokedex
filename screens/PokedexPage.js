@@ -1,34 +1,33 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList, ScrollView, Image} from 'react-native';
 import React, { useState, useEffect } from "react";
-import { getAllPokemon, getPokemon } from './utl/network';
+import { getAllPokemon, getPokemon } from './../utl/network';
 import { NavigationContainer } from '@react-navigation/native';
-import PokedexPage from './screens/PokedexPage'
 
 
-export default function App () {
+const PokedexPage = () => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      const resp = await getAllPokemon();
+      const resp = await getPokemon('Pikachu');
+      // console.log(resp)
       setData(resp);
     };
     fetchData();
   }, []); 
 
+
+  console.log(data)
+
   return (
-    <View style={styles.container}> 
-      {/* list */}
-
-      {/* <FlatList
-        data={data}
-        renderItem={({item}) => <Text style={styles.item}>{item}</Text>}
-      /> */}
-
-      {/* pokemon screen */}
-      <PokedexPage/>
-
+    <View>
+      <ScrollView>
+        <Text>
+          {data.getPokemon.species}
+        </Text>
+        {/* <Image source={data.getPokemon.sprite}></Image> */}
+      </ScrollView>
     </View>
   );
 }
@@ -55,3 +54,4 @@ const styles = StyleSheet.create({
   },
 })
 
+export default PokedexPage

@@ -3,7 +3,7 @@ import type { Pokemon } from "@favware/graphql-pokemon";
 import React, { useState, useEffect, useMemo } from "react";
 import { StyleSheet, Text, View, FlatList, StatusBar, ScrollView, Image} from 'react-native';
 import { PokedexItem } from "./PokedexItem";
-
+import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 
 function isForm(species: string): boolean {
   const formRegex = /[A-z]*-+[mega|hisui|gmax|paldea|alola]*.*/
@@ -25,16 +25,20 @@ export default function PokemonList() {
   }, []);
 
   return (
-    <FlatList
-      data={data}
-      renderItem={({item}) => {
-        if (isForm(item.species)) {
-          return null
-        }
-        return (<PokedexItem pokemon={item} />)
-      }}
-      keyExtractor={item => `${item.species}${item.num}`}
-    />
+    <SafeAreaProvider>
+        <SafeAreaView style={styles.container}>
+          <FlatList
+            data={data}
+            renderItem={({item}) => {
+              if (isForm(item.species)) {
+                return null
+              }
+              return (<PokedexItem pokemon={item} />)
+            }}
+            keyExtractor={item => `${item.species}${item.num}`}
+          />
+        </SafeAreaView>
+    </SafeAreaProvider>
   )
 }
 
@@ -42,13 +46,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 20,
-  },
-  item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-    borderRadius: 40
+    
   },
   title: {
     fontSize: 32,
